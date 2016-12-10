@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		.datalist{border:1px solid #ccc;border-collapse:collapse;width:100%;}
+		.datalist thead tr{background-color:#dfdfdf;}
+		td,th{border:1px solid #ccc;padding:5px 10px;}
+		.odd{background-color:#efefef;}
+		.selected{background-color: #fc0;color:#fff;}
+	</style>
+	<script src="js/jquery-1.12.3.js"></script>
+	<script>
+		$(function(){
+			/*
+				思路：
+				1、全选/不选
+				2、反选
+				3、点击任意地方选取
+				4、查找选取
+				5、全选状态修改
+			 */
+//全部tr
+var $tbody = $('.datalist tbody');
+	var $trs = $tbody.find('tr');
+	
+
+
+		var i=0;
+		var i1=0;
+	    var i2=0;
+		var i3=0;
+		var dd=0;
+	
+	// 点击任意单元格选择当前行
+			$trs.click(function(){
+
+				$(this).toggleClass('selected').find(':checkbox').prop('checked',$(this).hasClass('selected'));
+
+				// 点击时获取选中的复选框的数量
+			//	changeAllStatus();
+				console.log($(this).index());
+				 dd=$(this).index();
+			});
+	//第一行
+	
+		$("button").eq(0).click(function(){
+			$("tbody tr").eq(0).toggleClass('selected').find(':checkbox').prop('checked',$("tbody tr").eq(0).hasClass('selected'));
+
+				// 点击时获取选中的复选框的数量
+				//changeAllStatus();
+i=1;
+
+			
+			})
+		//最后一行
+	
+		$("button").eq(1).click(function(){
+		if(dd!=0){
+	 $("tbody tr").eq(dd).removeClass("selected");
+	};
+			$("tbody tr").last().toggleClass('selected').find(':checkbox').prop('checked',$("tbody tr").last().hasClass('selected'));
+
+				// 点击时获取选中的复选框的数量
+				//changeAllStatus();
+				i2=1;
+			})
+		//前3行
+		$("button").eq(2).click(function(){
+		//在执行前清除前面的样式
+		if(dd!=0){
+	 $("tbody tr").eq(dd).removeClass("selected");
+	};
+	if(i!=0){
+	 $("tbody tr").slice(0,3).removeClass("selected");
+	};
+			$("tbody tr").slice(0,3).toggleClass('selected').find(':checkbox').prop('checked',$("tbody tr").slice(0,3).hasClass('selected'));
+
+				// 点击时获取选中的复选框的数量
+				//changeAllStatus();
+
+             i=0;
+				
+			})
+		//后3行
+		$("button").eq(3).click(function(){
+		//在执行前清除前面的样式
+		if(dd!=0){
+	 $("tbody tr").eq(dd).removeClass("selected");
+	};
+	if(i2!=0){
+	 $("tbody tr").slice(3,6).removeClass("selected");
+	};
+			$("tbody tr").slice(3,6).toggleClass('selected').find(':checkbox').prop('checked',$("tbody tr").slice(3,6).hasClass('selected'));
+
+				// 点击时获取选中的复选框的数量
+				//changeAllStatus();
+
+				i1=1;
+				i2=0;
+			})
+		//第4到6行
+		$("button").eq(4).click(function(){
+if(dd!=0){
+	 $("tbody tr").eq(dd).removeClass("selected");
+	};
+if(i1 ==1){
+		   $("tbody tr").slice(3,7).removeClass("selected");
+		};
+
+			$("tbody tr").slice(3,7).toggleClass('selected').find(':checkbox').prop('checked',$("tbody tr").slice(3,7).hasClass('selected'));
+
+				// 点击时获取选中的复选框的数量
+				//changeAllStatus();
+     i1=0;
+
+			})
+	//第8行 这有问题
+	$("button").eq(5).click(function(){
+	if(dd!=0){
+	 $("tbody tr").eq(dd).removeClass("selected");
+	};
+			$("tbody tr").eq(5).toggleClass('selected').find(':checkbox').prop('checked',$("tbody tr").eq(5).hasClass('selected'));
+
+				// 点击时获取选中的复选框的数量
+				//changeAllStatus();
+			});
+	// 反选
+			$('#btnFx').click(function(){
+				$trs.toggleClass('selected').find(':checkbox').prop('checked',function(idx,oldval){
+					return !oldval;
+				});
+
+				// 点击时获取选中的复选框的数量
+				//changeAllStatus();
+			});
+			//all
+        
+			// 全选/不选
+			$('#all').click(function(){
+				$trs[this.checked?'addClass':'removeClass']('selected').find(':checkbox').prop('checked',this.checked);
+			});
+			//
+			var $keyword = $('#username');
+			var $btnSelect = $keyword.next();
+			// 所有复选框的数量
+			var checkboxLen = $tbody.find(':checkbox').length;
+
+			$btnSelect.click(function(){
+			var _keyword = $keyword.val();//'李宇春'
+
+				// 筛选出包含奥巴马的行
+			$trs.filter(':contains(' + _keyword + ')').addClass('selected').find(':checkbox').prop('checked',true)
+			});
+
+		});
+	</script>
+</head>
+<body>
+	<button>第1行</button>
+	<button>最后1行</button>
+	<button>前3行</button>
+	<button>后3行</button>
+	<button>第4-6行</button>
+	<button>第8行</button>
+	<input type="text" id="username"><button>查找</button>
+	<button id="btnFx">反选</button>
+	<table class="datalist">
+		<thead>
+			<tr>
+				<th width="20"><input type="checkbox" id="all"></th>
+				<th>姓名</th>
+				<th>昵称</th>
+				<th>性别</th>
+				<th>爱好</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><input type="checkbox"></td>
+				<td>刘备</td>
+				<td>小刘</td>
+				<td>男</td>
+				<td>撩妹，装逼，编草鞋</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox"></td>
+				<td>关羽</td>
+				<td>关二</td>
+				<td>男</td>
+				<td>耍大刀，变脸，喝酒</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox"></td>
+				<td>张飞</td>
+				<td>张三</td>
+				<td>男</td>
+				<td>打架，喝酒，耍流氓</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox"></td>
+				<td>赵云</td>
+				<td>赵四</td>
+				<td>男</td>
+				<td>打架，喝酒，耍帅</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox"></td>
+				<td>貂蝉</td>
+				<td>美女</td>
+				<td>女</td>
+				<td>撩汉，化妆</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox"></td>
+				<td>小乔</td>
+				<td>乔二</td>
+				<td>女</td>
+				<td>弹琴，唱歌，撩周瑜</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>
